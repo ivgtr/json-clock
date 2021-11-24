@@ -7,47 +7,65 @@ import { DefaultLayout } from "../../layouts/DefaultLayout";
 const clockInfo = [
   {
     id: 0,
-    content: "{",
+    left: "{",
+    center: "",
+    right: "",
     indent: 0,
   },
   {
     id: 1,
-    content: "year: 2021",
+    left: "year",
+    center: ":",
+    right: "2021",
     indent: 1,
   },
   {
     id: 2,
-    content: "monthIndex: Nov",
+    left: "monthIndex",
+    center: ":",
+    right: "Nov",
     indent: 1,
   },
   {
     id: 3,
-    content: "day: 24",
+    left: "day",
+    center: ":",
+    right: "24",
     indent: 1,
   },
   {
     id: 4,
-    content: "hours: 17",
+    left: "hours",
+    center: ":",
+    right: "18",
     indent: 1,
   },
   {
     id: 5,
-    content: "minutes: 10",
+    left: "minutes",
+    center: ":",
+    right: "05",
     indent: 1,
   },
   {
     id: 6,
-    content: "seconds: 10",
+    left: "seconds",
+    center: ":",
+    right: "05",
     indent: 1,
   },
   {
     id: 7,
-    content: "thema: monokai",
+    left: "thema",
+    center: ":",
+    right: "monokai",
     indent: 1,
   },
   {
     id: 8,
-    content: "}",
+    left: "}",
+    center: "",
+    right: "",
     indent: 0,
   },
 ];
@@ -82,7 +100,36 @@ const DatePage: NextPage = () => {
             <CodeLines lineLength={clockInfo.length} />
           </div>
           <div className={classNames("w-full", "h-full", "bg-[#1E1E1E]")}>
-            <p>right</p>
+            <ul>
+              {clockInfo.map((item) => {
+                const isObjectKey = item.left !== "{" && item.left !== "}";
+                return (
+                  <li key={item.id} className={classNames("h-[18px]")}>
+                    <p
+                      className={classNames(
+                        "flex",
+                        "gap-1",
+                        "w-full",
+                        "h-full",
+                        "bg-[#1E1E1E]",
+                        "text-xs",
+                        "text-[#9E9E9E]"
+                      )}
+                      style={{ paddingLeft: `${item.indent * 16}px` }}
+                    >
+                      <span className={classNames(isObjectKey && "text-[#9cdcfe]")}>
+                        {isObjectKey ? `"${item.left}"` : item.left}
+                      </span>
+                      <span>{item.center}</span>
+                      <span className={classNames(isObjectKey && "text-[#ce9178]")}>
+                        {isObjectKey ? `"${item.right}"` : item.right}
+                      </span>
+                      {isObjectKey && <span>{","}</span>}
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
       </DefaultLayout>
