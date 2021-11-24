@@ -1,14 +1,20 @@
-import type { NextPage } from "next";
-import { DefaultLayout } from "../layouts/DefaultLayout";
+import { NextPage } from "next";
+import Router from "next/router";
 
-const Home: NextPage = () => {
-  return (
-    <DefaultLayout>
-      <div>
-        <p>test</p>
-      </div>
-    </DefaultLayout>
-  );
+const RedirectPage: NextPage = () => {
+  return <div>RedirectPage</div>;
 };
 
-export default Home;
+RedirectPage.getInitialProps = async ({ res }) => {
+  if (typeof window === "undefined" && res) {
+    res.writeHead(302, { Location: "/date" });
+    res.end();
+
+    return {};
+  }
+  Router.push("/date");
+
+  return {};
+};
+
+export default RedirectPage;

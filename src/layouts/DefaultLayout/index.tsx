@@ -1,13 +1,21 @@
+import classNames from "classnames";
 import React from "react";
+import { Navigation } from "../../components/organisms/Navigation";
 
 export const DefaultLayout: React.FC = ({ children }) => {
   return (
-    <div className="w-full min-h-screen flex flex-col">
-      <header className="container mx-auto">
-        <h1>誰かが課金するとどうだ明るくなったろうおじさんがサイトを照らしてくれるサービス</h1>
-      </header>
-      <div className="container mx-auto flex-grow">{children}</div>
-      <footer className="container mx-auto">footer</footer>
+    <div className={classNames("w-full", "min-h-screen", "flex", "flex-col", "bg-[#252526]")}>
+      <Navigation />
+      <div className={classNames("flex-grow")}>{children}</div>
+      <footer className={classNames("container", "mx-auto", "text-center")}>
+        <small className={classNames("inline-block", "mt-12")}>
+          Please contact{" "}
+          <a className={classNames("underline", "text-blue-500")} href="https://twitter.com/iVgtr">
+            @ivgtr
+          </a>
+          , If you have any.
+        </small>
+      </footer>
     </div>
   );
 };
