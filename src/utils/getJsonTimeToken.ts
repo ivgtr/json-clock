@@ -18,6 +18,7 @@ export const getJsonTimeToken = (unixtime: number) => {
   const year = dateTime.getFullYear();
   const hour = dateTime.getHours().toString().padStart(2, "0");
   const minute = dateTime.getMinutes().toString().padStart(2, "0");
+  const second = dateTime.getSeconds().toString().padStart(2, "0");
 
   return [
     {
@@ -101,7 +102,7 @@ export const getJsonTimeToken = (unixtime: number) => {
       id: 10,
       left: "seconds",
       center: ":",
-      right: "00",
+      right: second,
       indent: 1,
     },
     {
