@@ -9,10 +9,9 @@ RedirectPage.getInitialProps = async ({ res }) => {
   if (typeof window === "undefined" && res) {
     res.writeHead(302, { Location: "/date" });
     res.end();
-
-    return {};
+  } else {
+    Router.push("/date");
   }
-  Router.push("/date");
 
   return {};
 };

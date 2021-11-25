@@ -13,7 +13,15 @@ const months = [
   "December",
 ];
 
-export const getJsonTimeToken = (unixtime: number) => {
+export type JsonToken = {
+  id: number;
+  left: string;
+  center: string;
+  right: string | number;
+  indent: number;
+};
+
+export const getJsonTimeTokens = (unixtime: number) => {
   const dateTime = new Date(unixtime);
   const year = dateTime.getFullYear();
   const hour = dateTime.getHours().toString().padStart(2, "0");

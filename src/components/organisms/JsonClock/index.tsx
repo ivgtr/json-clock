@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { getJsonTimeToken } from "../../../utils/getJsonTimeToken";
+import { getJsonTimeTokens } from "../../../utils/getJsonTimeToken";
 import { CodeBlock } from "../CodeBlock";
 
 type JsonToken = {
@@ -24,7 +24,7 @@ export const JsonClock: React.VFC<Props> = ({ defaultJsonClockTokens }) => {
   );
 
   const animate = useCallback(() => {
-    setJsonClockTokens(getJsonTimeToken(nowTime));
+    setJsonClockTokens(getJsonTimeTokens(nowTime));
     refRequestAnimationFrame.current = requestAnimationFrame(animate);
   }, [nowTime]);
 
