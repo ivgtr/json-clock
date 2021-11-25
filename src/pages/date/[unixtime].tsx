@@ -1,25 +1,40 @@
+import type { GetServerSidePropsContext } from "next";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import envJson from "../../assets/jsons/env.json";
 
-const RedirectUnixTimePage: NextPage = () => {
+type ServerSideProps = {
+  unixtime: string;
+};
+
+export async function getServerSideProps(context: GetServerSidePropsContext<ServerSideProps>) {
+  if (context.params?.unixtime) {
+    const unixtime = context.params.unixtime;
+    return {
+      props: {
+        unixtime,
+      },
+    };
+  }
+  return {
+    notFound: true,
+  };
+}
+
+const RedirectUnixTimePage: NextPage<ServerSideProps> = ({ unixtime }) => {
   const title = "date.json | json-clock";
   const description = "⏰ json時計で現在の時刻を確認してください。";
   const router = useRouter();
 
-  const { unixtime } = router.query;
-
   const ogUrl = useMemo(() => {
-    if (unixtime && typeof unixtime === "string") {
-      const url = new URL(`${envJson.url}/data`);
-      url.searchParams.set("unixtime", unixtime);
-      return url.toString();
-    } else return envJson.url;
-  }, [unixtime]);
+    const url = new URL(`${envJson.url}/data`);
+    return url.toString();
+  }, []);
 
   const ogpImageUrl = useMemo(() => {
+    console.log(typeof unixtime);
     if (unixtime && typeof unixtime === "string") {
       const url = new URL(`${envJson.url}/api/ogp`);
       url.searchParams.set("unixtime", unixtime);
