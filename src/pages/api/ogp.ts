@@ -1,9 +1,23 @@
-import { createCanvas } from "canvas";
+import { createCanvas, registerFont } from "canvas";
+import dataUriToBuffer from "data-uri-to-buffer";
+import { mkdtempSync, writeFileSync } from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
+import { tmpdir } from "os";
+import path from "path";
+import fontDataURI from "../../../public/fonts/SourceHanCodeJP.otf";
 import type { JsonToken } from "../../utils/getJsonTimeToken";
 import { getJsonTimeTokens } from "../../utils/getJsonTimeToken";
 
-const fontFamily = `Menlo, Monaco, "Courier New", monospace`;
+const fontBuf = dataUriToBuffer(fontDataURI);
+const td = mkdtempSync(path.join(tmpdir(), "gaming-aa"));
+const fontFile = path.join(td, "Saitamaar.ttf");
+writeFileSync(fontFile, fontBuf);
+
+registerFont(fontFile, {
+  family: "SourceHanCodeJP",
+});
+
+const fontFamily = `"SourceHanCodeJP", Menlo, Monaco, "Courier New", monospace`;
 
 function createImage(jsonClockTokens: JsonToken[]): Buffer {
   const width = 1200 as const;
@@ -47,7 +61,6 @@ function createImage(jsonClockTokens: JsonToken[]): Buffer {
 
         ctx.fillText(`${token.right}`, rightX, y);
       }
-      console.log(x, centerX, rightX);
     }
   });
 
