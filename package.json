@@ -10,7 +10,7 @@
     "proxy": "ngrok http 3000"
   },
   "dependencies": {
-    "canvas": "^2.8.0",
+    "canvas": "2.6.1",
     "classnames": "^2.3.1",
     "dayjs": "^1.10.7",
     "next": "12.0.4",
