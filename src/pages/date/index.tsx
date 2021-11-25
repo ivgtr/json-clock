@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import React, { useMemo } from "react";
 import envJson from "../../assets/jsons/env.json";
+import { ShareButton } from "../../components/atoms/ShareButton";
 import { CodeLines } from "../../components/organisms/CodeLines";
 import { JsonClock } from "../../components/organisms/JsonClock";
 import { DefaultLayout } from "../../layouts/DefaultLayout";
@@ -22,9 +23,22 @@ const Pankuzu: React.VFC = () => (
 const DatePage: NextPage = () => {
   const title = "date.json | json-clock";
   const description = "⏰ json時計で現在の時刻を確認してください。";
-  const ogUrl = useMemo(() => {
-    return envJson.url;
+  const unixtime = useMemo(() => {
+    return Math.floor(Date.now() / 1000);
   }, []);
+
+  const ogUrl = useMemo(() => {
+    const url = new URL(`${envJson.url}/date`);
+    return url.toString();
+  }, []);
+
+  const ogpImageUrl = useMemo(() => {
+    if (unixtime && typeof unixtime === "string") {
+      const url = new URL(`${envJson.url}/api/ogp`);
+      url.searchParams.set("unixtime", unixtime);
+      return url.toString();
+    } else return envJson.url;
+  }, [unixtime]);
 
   return (
     <>
@@ -38,7 +52,7 @@ const DatePage: NextPage = () => {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={ogUrl} />
         <meta property="og:site_name" content={title} />
-        {/* <meta property="og:image" content={ogpImageUrl} /> */}
+        <meta property="og:image" content={ogpImageUrl} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:creator" content="@ivgtr" />
         <link rel="shortcut icon" href="/favicon.ico" />
@@ -55,6 +69,9 @@ const DatePage: NextPage = () => {
           <div className={classNames("w-full", "h-full", "bg-[#1E1E1E]")}>
             <JsonClock defaultJsonClockTokens={defaultClockInfo} />
           </div>
+        </div>
+        <div className={classNames("text-right", "p-5")}>
+          <ShareButton ogUrl={ogUrl} />
         </div>
       </DefaultLayout>
     </>
