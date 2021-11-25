@@ -24,7 +24,7 @@ const DatePage: NextPage = () => {
   const title = "date.json | json-clock";
   const description = "⏰ json時計で現在の時刻を確認してください。";
   const unixtime = useMemo(() => {
-    return Math.floor(Date.now() / 1000);
+    return Date.now();
   }, []);
 
   const ogUrl = useMemo(() => {

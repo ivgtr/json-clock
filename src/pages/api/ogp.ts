@@ -78,7 +78,7 @@ export default async function Api(
   }
 
   try {
-    const jsonClockTokens = getJsonTimeTokens(Number(unixtime));
+    const jsonClockTokens = getJsonTimeTokens(Number(unixtime) + 1000 * 60 * 60 * 9); // 時差を考慮
 
     const buf = createImage(jsonClockTokens);
 
