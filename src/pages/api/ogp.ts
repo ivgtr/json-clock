@@ -1,19 +1,10 @@
 import { createCanvas, registerFont } from "canvas";
-import dataUriToBuffer from "data-uri-to-buffer";
-import { mkdtempSync, writeFileSync } from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
-import { tmpdir } from "os";
 import path from "path";
-import fontDataURI from "../../../public/fonts/SourceHanCodeJP.otf";
 import type { JsonToken } from "../../utils/getJsonTimeToken";
 import { getJsonTimeTokens } from "../../utils/getJsonTimeToken";
 
-const fontBuf = dataUriToBuffer(fontDataURI);
-const td = mkdtempSync(path.join(tmpdir(), "gaming-aa"));
-const fontFile = path.join(td, "Saitamaar.ttf");
-writeFileSync(fontFile, fontBuf);
-
-registerFont(fontFile, {
+registerFont(path.resolve("./public/fonts/SourceHanCodeJP.otf"), {
   family: "SourceHanCodeJP",
 });
 
@@ -33,12 +24,13 @@ function createImage(jsonClockTokens: JsonToken[]): Buffer {
 
   // json-clock text
   const fontSize = 24;
-  const fontSizeWidth = fontSize * 0.6;
+  const fontSizeWidth = fontSize * 0.65;
   ctx.font = `${fontSize}px ${fontFamily}`;
   ctx.textBaseline = "top";
 
   jsonClockTokens.forEach((token, i) => {
     const isObjectKey = token.left !== "{" && token.left !== "}";
+    const isEndIndex = i === jsonClockTokens.length - 2;
     const x = padding + fontSize * token.indent;
     const y = padding + i * (fontSize + 8);
     if (!isObjectKey) {
@@ -48,7 +40,7 @@ function createImage(jsonClockTokens: JsonToken[]): Buffer {
       const leftX = x + fontSizeWidth;
       ctx.fillStyle = "#9cdcfe";
       ctx.fillText(`"${token.left}"`, leftX, y);
-      const centerX = leftX + token.left.length * fontSizeWidth + 30;
+      const centerX = leftX + token.left.length * fontSizeWidth + 40;
       ctx.fillStyle = "#FFFFFF";
       ctx.fillText(token.center, centerX, y);
       const rightX = centerX + fontSizeWidth + 10;
@@ -60,6 +52,13 @@ function createImage(jsonClockTokens: JsonToken[]): Buffer {
         ctx.fillStyle = "#b5cea8";
 
         ctx.fillText(`${token.right}`, rightX, y);
+      }
+      if (!isEndIndex) {
+        const tokenRightLength =
+          typeof token.right === "string" ? token.right.length + 2 : token.right.toString().length;
+        const commaX = rightX + tokenRightLength * 16.7;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillText(",", commaX, y);
       }
     }
   });
